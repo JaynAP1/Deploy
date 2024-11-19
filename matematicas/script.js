@@ -130,7 +130,8 @@ function ViewFetch(){
             const sendButton = document.getElementById("SendR");
     
             sendButton.onclick = async () => {
-    
+                AnswerModal.close();
+
                 if (Answer.value.trim() === '') {
                     console.error('La respuesta está vacía.');
                     return;
@@ -141,7 +142,6 @@ function ViewFetch(){
     
                 try {
                     await AddNewAnswer(Answer.value, currentId);
-                    AnswerModal.close();
                 } catch (error) {
                     console.error('Error al enviar la respuesta:', error);
                 }
@@ -151,6 +151,7 @@ function ViewFetch(){
 
     })
     document.getElementById("question").addEventListener("click",()=>{
+        Verificador()
         QuestionModal.style="display:flex;"
         QuestionModal.showModal()
         Question.addEventListener("change",(e)=>{
@@ -207,7 +208,7 @@ async function AddNewQuestion(Q) {
             'Content-Type' : 'application/json',
         },
         body:JSON.stringify({
-            "user": "User",
+            "user": NombreUser,
             "perfil": "https://randomuser.me/api/portraits/men/1.jpg",
             "pregunta": task,
             "respuestas": [
@@ -217,4 +218,14 @@ async function AddNewQuestion(Q) {
     Q.value = '';
     ViewFetch()
 };
-ViewFetch()
+ViewFetch();
+
+let NombreUser = sessionStorage.getItem("Nombre")
+
+document.addEventListener("DOMContentLoaded", Verificador)
+
+function Verificador(){
+    if (sessionStorage.getItem("Nombre") === ""){
+        window.location.href="/index.html";
+    }
+}

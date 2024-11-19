@@ -41,7 +41,8 @@ fetch("https://66e0bd7e2fb67ac16f2a7a28.mockapi.io/v")
 
         Data.forEach(Users => {
             if (VeUser === Users.User && VePass===Users.Password ){
-                window.location.href="../principal/index.html"
+                window.location.href="../principal/index.html";
+                SaveUserT(Users.User, Users.id)
             }else{
                 document.getElementById("Modal").showModal();
                 document.getElementById("CerrarModal").addEventListener("click",()=>{
@@ -59,3 +60,6 @@ document.getElementById("mostrar").addEventListener("change",(e)=>{
         document.querySelector(".password").type="password"   
     }    
 })
+
+
+
