@@ -110,7 +110,12 @@ function ViewFetch(){
                     console.log("ver");
                     const id = e.target.getAttribute("data-id");
                     document.querySelectorAll(".respuestaC").forEach(cj=>{
-                        document.querySelector(`#CajaR${id}`).style="height:auto"
+                        if (document.querySelector(`#CajaR${id}`).style.height === "auto"){
+                            document.querySelector(`#CajaR${id}`).style="height:0"
+                        }
+                        else{
+                            document.querySelector(`#CajaR${id}`).style="height:auto"
+                        }
                     })
                 }
             }
@@ -170,6 +175,7 @@ async function AddNewAnswer(Q,id) {
     const data= await response.json()
 
     let Nueva = {
+        "fecha": DateF(),
         "user": "User",
         "respuesta": Q,
         "perfil": "https://randomuser.me/api/portraits/women/1.jpg"
@@ -208,7 +214,8 @@ async function AddNewQuestion(Q) {
             'Content-Type' : 'application/json',
         },
         body:JSON.stringify({
-            "user": NombreUser,
+            "user": "User",
+            "fecha": DateF(),
             "perfil": "https://randomuser.me/api/portraits/men/1.jpg",
             "pregunta": task,
             "respuestas": [
@@ -228,4 +235,15 @@ function Verificador(){
     if (sessionStorage.getItem("Nombre") === ""){
         window.location.href="/index.html";
     }
+}
+
+function DateF(){
+    const fechaActual = new Date();
+    const dia = fechaActual.getDate();
+    const mes = fechaActual.getMonth() + 1; 
+    const año = fechaActual.getFullYear();
+    const hora = fechaActual.getHours();
+    const minutos = fechaActual.getMinutes();
+    let Fecha_Actual = (`${dia}/${mes}/${año} - ${hora}:${minutos}`);
+    return Fecha_Actual
 }
