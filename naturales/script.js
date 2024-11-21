@@ -15,17 +15,6 @@ document.querySelector(".materias svg").addEventListener("click",()=>{
 
 })
 
-document.querySelector("#regalo").addEventListener("click",()=>{    
-    document.querySelector("#dialogRegalo").showModal();
-    document.querySelector(".question").innerHTML="hola"
-    
-    document.querySelector("#exit").addEventListener("click",()=>{
-        document.querySelector("#dialogRegalo").close();
-    })
-    console.log("hola");
-    
-})
-
 const noti = document.getElementById('noti');
 const notificaciones = document.getElementById('notificaciones');
 
@@ -36,6 +25,17 @@ noti.addEventListener('click', function() {
         notificaciones.close();
     }
 });
+
+document.querySelector("#regalo").addEventListener("click",()=>{    
+    document.querySelector("#dialogRegalo").showModal();
+    document.querySelector(".question").innerHTML="hola"
+    
+    document.querySelector("#exit").addEventListener("click",()=>{
+        document.querySelector("#dialogRegalo").close();
+    })
+    console.log("hola");
+    
+})
 //------------------------------------------------------------------
 const LeftBox = document.getElementById("left");
 const QuestionModal = document.getElementById("QuestionModal");
@@ -61,10 +61,10 @@ function ViewFetch(){
             <div class="pregunta">
                     <div class="user">
                         <div class="user_name">
-                            <img src="https://randomuser.me/api/portraits/men/20.jpg" alt="">
+                            <img src="${obj.perfil}" alt="">
                             <p class="name">${obj.user}</p>
                         </div>
-                        <div class="date">3/10/2024</div>
+                        <div class="date">${obj.fecha}</div>
                     </div>
                     <div class="question">${obj.pregunta}</div>
                     <div class="responder">
@@ -84,10 +84,10 @@ function ViewFetch(){
                         <div class="respuestaC">
                             <div class="rUser">
                                 <div class="rUSer_name">
-                                    <img src="https://randomuser.me/api/portraits/men/30.jpg" alt="">
+                                    <img src=${Respuestas.perfil} alt="">
                                     <p class="rName">${Respuestas.user}</p>
                                 </div>
-                                <div class="dateAnswers">09/09/2024 - 6:12 p.m.</div>
+                                <div class="dateAnswers">${Respuestas.fecha}</div>
                             </div>
                             <div class="rRespuesta">
                                 ${Respuestas.respuesta}
@@ -110,7 +110,12 @@ function ViewFetch(){
                     console.log("ver");
                     const id = e.target.getAttribute("data-id");
                     document.querySelectorAll(".respuestaC").forEach(cj=>{
-                        document.querySelector(`#CajaR${id}`).style="height:auto"
+                        if (document.querySelector(`#CajaR${id}`).style.height === "auto"){
+                            document.querySelector(`#CajaR${id}`).style="height:0"
+                        }
+                        else{
+                            document.querySelector(`#CajaR${id}`).style="height:auto"
+                        }
                     })
                 }
             }
@@ -130,7 +135,8 @@ function ViewFetch(){
             const sendButton = document.getElementById("SendR");
     
             sendButton.onclick = async () => {
-    
+                AnswerModal.close();
+
                 if (Answer.value.trim() === '') {
                     console.error('La respuesta está vacía.');
                     return;
@@ -141,7 +147,6 @@ function ViewFetch(){
     
                 try {
                     await AddNewAnswer(Answer.value, currentId);
-                    AnswerModal.close();
                 } catch (error) {
                     console.error('Error al enviar la respuesta:', error);
                 }
@@ -151,6 +156,7 @@ function ViewFetch(){
 
     })
     document.getElementById("question").addEventListener("click",()=>{
+        Verificador()
         QuestionModal.style="display:flex;"
         QuestionModal.showModal()
         Question.addEventListener("change",(e)=>{
@@ -169,9 +175,10 @@ async function AddNewAnswer(Q,id) {
     const data= await response.json()
 
     let Nueva = {
-        "user": "User",
+        "fecha": DateF(),
+        "user": Nombre,
         "respuesta": Q,
-        "perfil": "https://randomuser.me/api/portraits/women/1.jpg"
+        "perfil": FotoUser
     }
     
     const NuevasRespuestas = data.respuestas
@@ -207,8 +214,9 @@ async function AddNewQuestion(Q) {
             'Content-Type' : 'application/json',
         },
         body:JSON.stringify({
-            "user": "User",
-            "perfil": "https://randomuser.me/api/portraits/men/1.jpg",
+            "user": Nombre,
+            "fecha": DateF(),
+            "perfil": FotoUser,
             "pregunta": task,
             "respuestas": [
             ]
@@ -217,4 +225,30 @@ async function AddNewQuestion(Q) {
     Q.value = '';
     ViewFetch()
 };
-ViewFetch()
+ViewFetch();
+
+let NombreUser = sessionStorage.getItem("Nombre");
+let Nombre = sessionStorage.getItem("Name");
+let FotoUser = sessionStorage.getItem("Foto");
+
+console.log(FotoUser);
+
+
+document.addEventListener("DOMContentLoaded", Verificador)
+
+function Verificador(){
+    if (sessionStorage.getItem("Nombre") === ""){
+        window.location.href="/index.html";
+    }
+}
+
+function DateF(){
+    const fechaActual = new Date();
+    const dia = fechaActual.getDate();
+    const mes = fechaActual.getMonth() + 1; 
+    const año = fechaActual.getFullYear();
+    const hora = fechaActual.getHours();
+    const minutos = fechaActual.getMinutes();
+    let Fecha_Actual = (`${dia}/${mes}/${año} - ${hora}:${minutos}`);
+    return Fecha_Actual
+}

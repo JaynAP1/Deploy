@@ -55,16 +55,39 @@ function ViewFetch(){
     fetch("https://66fe4aa42b9aac9c997b3402.mockapi.io/Feria/Matematicas")
     .then(res => res.json())
     .then(data =>{
+        let contador=1;
         document.querySelector(".seccionQuestion").innerHTML=''
         data.forEach(obj => {
-            document.querySelector(".seccionQuestion").innerHTML+=`
-            <div class="pregunta">
+            if(sessionStorage.getItem("Categoria") === "Profesor" ){
+                document.querySelector(".seccionQuestion").innerHTML+=`
+                <div class="pregunta">
                     <div class="user">
                         <div class="user_name">
-                            <img src="https://randomuser.me/api/portraits/men/20.jpg" alt="">
+                            <img src="${obj.perfil}" alt="">
                             <p class="name">${obj.user}</p>
                         </div>
-                        <div class="date">3/10/2024</div>
+                        <div class="date">${obj.fecha}</div>
+                    </div>
+                    <div class="question">${obj.pregunta}</div>
+                    <div class="responder">
+                        
+                        <button class="verRespuestasButton" id="ver" data-id="${obj.id}">Ver Respuestas</button>
+                    </div>
+                    <div class="respuestas" id="CajaR${obj.id}">
+                        
+                    </div>
+                </div>
+            `
+            }
+            else{
+                document.querySelector(".seccionQuestion").innerHTML+=`
+                <div class="pregunta">
+                    <div class="user">
+                        <div class="user_name">
+                            <img src="${obj.perfil}" alt="">
+                            <p class="name">${obj.user}</p>
+                        </div>
+                        <div class="date">${obj.fecha}</div>
                     </div>
                     <div class="question">${obj.pregunta}</div>
                     <div class="responder">
@@ -75,7 +98,9 @@ function ViewFetch(){
                         
                     </div>
                 </div>
-            `
+                `
+            }
+            
             const BoxAnswer = document.getElementById(`CajaR${obj.id}`);
             ShowAnswers()
             function ShowAnswers(){
@@ -84,23 +109,21 @@ function ViewFetch(){
                         <div class="respuestaC">
                             <div class="rUser">
                                 <div class="rUSer_name">
-                                    <img src="https://randomuser.me/api/portraits/men/30.jpg" alt="">
+                                    <img src=${Respuestas.perfil} alt="">
                                     <p class="rName">${Respuestas.user}</p>
                                 </div>
-                                <div class="dateAnswers">09/09/2024 - 6:12 p.m.</div>
+                                <div class="dateAnswers">${Respuestas.fecha}</div>
                             </div>
                             <div class="rRespuesta">
                                 ${Respuestas.respuesta}
                             </div>
-                            <div class="stars">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 256 256"><path fill="gray" d="M237.28 97.87A14.18 14.18 0 0 0 224.76 88l-60.25-4.87l-23.22-56.2a14.37 14.37 0 0 0-26.58 0L91.49 83.11L31.24 88a14.18 14.18 0 0 0-12.52 9.89A14.43 14.43 0 0 0 23 113.32l46 39.61l-14 59.25a14.4 14.4 0 0 0 5.59 15a14.1 14.1 0 0 0 15.91.6l51.5-31.66l51.58 31.71a14.1 14.1 0 0 0 15.91-.6a14.4 14.4 0 0 0 5.59-15l-14-59.25L233 113.32a14.43 14.43 0 0 0 4.28-15.45m-12.14 6.37l-48.69 42a6 6 0 0 0-1.92 5.92l14.88 62.79a2.35 2.35 0 0 1-.95 2.57a2.24 2.24 0 0 1-2.6.1L131.14 184a6 6 0 0 0-6.28 0l-54.72 33.61a2.24 2.24 0 0 1-2.6-.1a2.35 2.35 0 0 1-1-2.57l14.88-62.79a6 6 0 0 0-1.92-5.92l-48.69-42a2.37 2.37 0 0 1-.73-2.65a2.28 2.28 0 0 1 2.07-1.65l63.92-5.16a6 6 0 0 0 5.06-3.69l24.63-59.6a2.35 2.35 0 0 1 4.38 0l24.63 59.6a6 6 0 0 0 5.06 3.69l63.92 5.16a2.28 2.28 0 0 1 2.07 1.65a2.37 2.37 0 0 1-.68 2.66"/></svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 256 256"><path fill="gray" d="M237.28 97.87A14.18 14.18 0 0 0 224.76 88l-60.25-4.87l-23.22-56.2a14.37 14.37 0 0 0-26.58 0L91.49 83.11L31.24 88a14.18 14.18 0 0 0-12.52 9.89A14.43 14.43 0 0 0 23 113.32l46 39.61l-14 59.25a14.4 14.4 0 0 0 5.59 15a14.1 14.1 0 0 0 15.91.6l51.5-31.66l51.58 31.71a14.1 14.1 0 0 0 15.91-.6a14.4 14.4 0 0 0 5.59-15l-14-59.25L233 113.32a14.43 14.43 0 0 0 4.28-15.45m-12.14 6.37l-48.69 42a6 6 0 0 0-1.92 5.92l14.88 62.79a2.35 2.35 0 0 1-.95 2.57a2.24 2.24 0 0 1-2.6.1L131.14 184a6 6 0 0 0-6.28 0l-54.72 33.61a2.24 2.24 0 0 1-2.6-.1a2.35 2.35 0 0 1-1-2.57l14.88-62.79a6 6 0 0 0-1.92-5.92l-48.69-42a2.37 2.37 0 0 1-.73-2.65a2.28 2.28 0 0 1 2.07-1.65l63.92-5.16a6 6 0 0 0 5.06-3.69l24.63-59.6a2.35 2.35 0 0 1 4.38 0l24.63 59.6a6 6 0 0 0 5.06 3.69l63.92 5.16a2.28 2.28 0 0 1 2.07 1.65a2.37 2.37 0 0 1-.68 2.66"/></svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 256 256"><path fill="gray" d="M237.28 97.87A14.18 14.18 0 0 0 224.76 88l-60.25-4.87l-23.22-56.2a14.37 14.37 0 0 0-26.58 0L91.49 83.11L31.24 88a14.18 14.18 0 0 0-12.52 9.89A14.43 14.43 0 0 0 23 113.32l46 39.61l-14 59.25a14.4 14.4 0 0 0 5.59 15a14.1 14.1 0 0 0 15.91.6l51.5-31.66l51.58 31.71a14.1 14.1 0 0 0 15.91-.6a14.4 14.4 0 0 0 5.59-15l-14-59.25L233 113.32a14.43 14.43 0 0 0 4.28-15.45m-12.14 6.37l-48.69 42a6 6 0 0 0-1.92 5.92l14.88 62.79a2.35 2.35 0 0 1-.95 2.57a2.24 2.24 0 0 1-2.6.1L131.14 184a6 6 0 0 0-6.28 0l-54.72 33.61a2.24 2.24 0 0 1-2.6-.1a2.35 2.35 0 0 1-1-2.57l14.88-62.79a6 6 0 0 0-1.92-5.92l-48.69-42a2.37 2.37 0 0 1-.73-2.65a2.28 2.28 0 0 1 2.07-1.65l63.92-5.16a6 6 0 0 0 5.06-3.69l24.63-59.6a2.35 2.35 0 0 1 4.38 0l24.63 59.6a6 6 0 0 0 5.06 3.69l63.92 5.16a2.28 2.28 0 0 1 2.07 1.65a2.37 2.37 0 0 1-.68 2.66"/></svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 256 256"><path fill="gray" d="M237.28 97.87A14.18 14.18 0 0 0 224.76 88l-60.25-4.87l-23.22-56.2a14.37 14.37 0 0 0-26.58 0L91.49 83.11L31.24 88a14.18 14.18 0 0 0-12.52 9.89A14.43 14.43 0 0 0 23 113.32l46 39.61l-14 59.25a14.4 14.4 0 0 0 5.59 15a14.1 14.1 0 0 0 15.91.6l51.5-31.66l51.58 31.71a14.1 14.1 0 0 0 15.91-.6a14.4 14.4 0 0 0 5.59-15l-14-59.25L233 113.32a14.43 14.43 0 0 0 4.28-15.45m-12.14 6.37l-48.69 42a6 6 0 0 0-1.92 5.92l14.88 62.79a2.35 2.35 0 0 1-.95 2.57a2.24 2.24 0 0 1-2.6.1L131.14 184a6 6 0 0 0-6.28 0l-54.72 33.61a2.24 2.24 0 0 1-2.6-.1a2.35 2.35 0 0 1-1-2.57l14.88-62.79a6 6 0 0 0-1.92-5.92l-48.69-42a2.37 2.37 0 0 1-.73-2.65a2.28 2.28 0 0 1 2.07-1.65l63.92-5.16a6 6 0 0 0 5.06-3.69l24.63-59.6a2.35 2.35 0 0 1 4.38 0l24.63 59.6a6 6 0 0 0 5.06 3.69l63.92 5.16a2.28 2.28 0 0 1 2.07 1.65a2.37 2.37 0 0 1-.68 2.66"/></svg>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 256 256"><path fill="gray" d="M237.28 97.87A14.18 14.18 0 0 0 224.76 88l-60.25-4.87l-23.22-56.2a14.37 14.37 0 0 0-26.58 0L91.49 83.11L31.24 88a14.18 14.18 0 0 0-12.52 9.89A14.43 14.43 0 0 0 23 113.32l46 39.61l-14 59.25a14.4 14.4 0 0 0 5.59 15a14.1 14.1 0 0 0 15.91.6l51.5-31.66l51.58 31.71a14.1 14.1 0 0 0 15.91-.6a14.4 14.4 0 0 0 5.59-15l-14-59.25L233 113.32a14.43 14.43 0 0 0 4.28-15.45m-12.14 6.37l-48.69 42a6 6 0 0 0-1.92 5.92l14.88 62.79a2.35 2.35 0 0 1-.95 2.57a2.24 2.24 0 0 1-2.6.1L131.14 184a6 6 0 0 0-6.28 0l-54.72 33.61a2.24 2.24 0 0 1-2.6-.1a2.35 2.35 0 0 1-1-2.57l14.88-62.79a6 6 0 0 0-1.92-5.92l-48.69-42a2.37 2.37 0 0 1-.73-2.65a2.28 2.28 0 0 1 2.07-1.65l63.92-5.16a6 6 0 0 0 5.06-3.69l24.63-59.6a2.35 2.35 0 0 1 4.38 0l24.63 59.6a6 6 0 0 0 5.06 3.69l63.92 5.16a2.28 2.28 0 0 1 2.07 1.65a2.37 2.37 0 0 1-.68 2.66"/></svg>
+                            </div>
+                            <div class="stars${contador}" id="stars" onclick="estrellas(${contador},${Respuestas.id})" >
+                                <svg id="star1" xmlns="http://www.w3.org/2000/svg" width="2vw" viewBox="0 0 24 24" style="fill: #888888;transform: msFilter;"><path d="m6.516 14.323-1.49 6.452a.998.998 0 0 0 1.529 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4 4.536-4.082a1 1 0 0 0-.59-1.74l-5.701-.454-2.467-5.461a.998.998 0 0 0-1.822 0L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.214 4.107zm2.853-4.326a.998.998 0 0 0 .832-.586L12 5.43l1.799 3.981a.998.998 0 0 0 .832.586l3.972.315-3.271 2.944c-.284.256-.397.65-.293 1.018l1.253 4.385-3.736-2.491a.995.995 0 0 0-1.109 0l-3.904 2.603 1.05-4.546a1 1 0 0 0-.276-.94l-3.038-2.962 4.09-.326z"></path></svg>
                             </div>
                         </div>
                     `
+                    contador+=1;
                 })
                 document.querySelectorAll("#ver").forEach(VerAnswer=>{
                     VerAnswer.addEventListener("click", Show)
@@ -109,12 +132,17 @@ function ViewFetch(){
                 function Show(e){
                     console.log("ver");
                     const id = e.target.getAttribute("data-id");
+                    const Boton = e.srcElement;
+                    
                     document.querySelectorAll(".respuestaC").forEach(cj=>{
                         if (document.querySelector(`#CajaR${id}`).style.height === "auto"){
                             document.querySelector(`#CajaR${id}`).style="height:0"
+                            Boton.textContent = "Ver Respuestas";
                         }
                         else{
                             document.querySelector(`#CajaR${id}`).style="height:auto"
+                            Boton.textContent = "Ocultar Respuestas";
+                            
                         }
                     })
                 }
@@ -174,11 +202,15 @@ async function AddNewAnswer(Q,id) {
     const response = await fetch(`https://66fe4aa42b9aac9c997b3402.mockapi.io/Feria/Matematicas/${id}`);
     const data= await response.json()
 
+    let idAnterior = Number(data.id)+1
+    
+
     let Nueva = {
+        "id": `${idAnterior}`,
         "fecha": DateF(),
-        "user": "User",
+        "user": Nombre,
         "respuesta": Q,
-        "perfil": "https://randomuser.me/api/portraits/women/1.jpg"
+        "perfil": FotoUser
     }
     
     const NuevasRespuestas = data.respuestas
@@ -214,9 +246,9 @@ async function AddNewQuestion(Q) {
             'Content-Type' : 'application/json',
         },
         body:JSON.stringify({
-            "user": "User",
+            "user": Nombre,
             "fecha": DateF(),
-            "perfil": "https://randomuser.me/api/portraits/men/1.jpg",
+            "perfil": FotoUser,
             "pregunta": task,
             "respuestas": [
             ]
@@ -227,7 +259,12 @@ async function AddNewQuestion(Q) {
 };
 ViewFetch();
 
-let NombreUser = sessionStorage.getItem("Nombre")
+let NombreUser = sessionStorage.getItem("Nombre");
+let Nombre = sessionStorage.getItem("Name");
+let FotoUser = sessionStorage.getItem("Foto");
+
+console.log(FotoUser);
+
 
 document.addEventListener("DOMContentLoaded", Verificador)
 
@@ -247,3 +284,12 @@ function DateF(){
     let Fecha_Actual = (`${dia}/${mes}/${año} - ${hora}:${minutos}`);
     return Fecha_Actual
 }
+
+function estrellas(id_estrella,id){
+const stars = document.querySelector(".stars"+id_estrella);
+console.log(id_estrella, id);
+    stars.innerHTML = `
+    <svg id="star1" xmlns="http://www.w3.org/2000/svg" width="2vw" viewBox="0 0 24 24" style="fill: #3B5CBF;transform: msFilter;"><path d="M21.947 9.179a1.001 1.001 0 0 0-.868-.676l-5.701-.453-2.467-5.461a.998.998 0 0 0-1.822-.001L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.213 4.107-1.49 6.452a1 1 0 0 0 1.53 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4 4.536-4.082c.297-.268.406-.686.278-1.065z"></path></svg>
+    `
+}
+    
